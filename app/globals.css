@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+/*
+  Brand tokens are set at :root in app/layout.tsx from siteConfig.theme.colors
+  and siteConfig.theme.fonts. Tailwind v4 reads these via @theme inline below,
+  generating utilities like bg-primary, text-primary, font-heading, font-body.
+*/
+@theme inline {
+  --color-primary: var(--brand-primary);
+  --color-secondary: var(--brand-secondary);
+  --color-background: var(--brand-background);
+  --color-foreground: var(--brand-foreground);
+  --color-muted: var(--brand-muted);
+
+  --font-heading: var(--brand-font-heading);
+  --font-body: var(--brand-font-body);
+  --font-sans: var(--brand-font-body);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--brand-background);
+  color: var(--brand-foreground);
+  font-family: var(--brand-font-body), system-ui, -apple-system, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--brand-font-heading), var(--brand-font-body), system-ui, sans-serif;
+}
