@@ -10,8 +10,14 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-foreground/10 bg-background/80 backdrop-blur">
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-        <a href="/" className="font-heading text-lg font-semibold tracking-tight text-foreground">
-          {business.name}
+        <a href="/" className="flex items-center gap-2">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={business.logo.light}
+            alt={business.name}
+            className="h-9 w-auto"
+          />
+          <span className="sr-only">{business.name}</span>
         </a>
 
         <ul className="hidden items-center gap-8 md:flex">

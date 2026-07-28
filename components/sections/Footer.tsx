@@ -76,7 +76,7 @@ export function Footer() {
             <p>
               Built by{" "}
               <a
-                href="https://github.com/Chrisemeka"
+                href="https://chrisemeka.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="underline underline-offset-2 hover:text-background"
