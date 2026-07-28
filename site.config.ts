@@ -28,12 +28,12 @@ export const siteConfig: SiteConfig = {
   },
   contact: {
     email: "nkirufidelia@yahoo.com", 
-    phone: "+2349028425427",
-    whatsapp: "+2349028425427",
+    phone: "+2349134895792",
+    whatsapp: "+2349134895792",
     whatsappPrefilledMessage:
       "Hi NEK Ventures! I saw your website and would like to enquire about your cargo services.",
     address: {
-      street: "23, Olatunji Idowu Street, Off Alidada, Ago Palace Way", 
+      street: "1b Modinatu Raskiyat Street. Unique Estate. Baruwa Ipaja.", 
       city: "Lagos",
       state: "Lagos",
       country: "Nigeria",
@@ -98,7 +98,7 @@ export const siteConfig: SiteConfig = {
       { label: "Services", href: "#services" },
       { label: "Contact", href: "#contact" },
     ],
-    ctaButton: { label: "WhatsApp Us", href: "https://wa.me/2349028425427" },
+    ctaButton: { label: "WhatsApp Us", href: "https://wa.me/2349134895792" },
   },
   footer: {
     showBuiltBy: true,
