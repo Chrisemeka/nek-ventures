@@ -95,6 +95,7 @@ export type FooterConfig = {
 };
 
 export type SEOConfig = {
+  siteUrl: string;
   defaultTitle: string;
   defaultDescription: string;
   keywords: string[];

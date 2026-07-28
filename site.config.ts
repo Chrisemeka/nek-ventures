@@ -9,7 +9,7 @@ export const siteConfig: SiteConfig = {
     logo: {
       light: "/images/logo.png",
       dark: "/images/logo.png",
-      favicon: "/favicon.ico",
+      favicon: "/favicon.png",
     },
     yearFounded: 2020,
   },
@@ -39,8 +39,8 @@ export const siteConfig: SiteConfig = {
       country: "Nigeria",
     },
     hours: [
-      { day: "Mon-Fri", open: "09:00", close: "18:00" },
-      { day: "Sat", open: "10:00", close: "16:00" },
+      { day: "Mon-Fri", open: "09:00am", close: "6:00pm" },
+      { day: "Sat", open: "10:00am", close: "4:00pm" },
     ],
   },
   social: {
@@ -53,9 +53,9 @@ export const siteConfig: SiteConfig = {
   sections: {
     hero: {
       enabled: true,
-      headline: "Ship anywhere in the world — fast, reliable, worry-free.",
+      headline: "Air & sea cargo from Nigeria to the USA, UK, Canada & Europe.",
       subheadline:
-        "Air and sea cargo to the USA, UK, Canada and Europe. We also source and ship Nigerian food items and hair accessories on your behalf.",
+        "Fast, reliable, worry-free door-to-door shipping from Lagos. We also source and ship Nigerian foodstuff and hair accessories on your behalf.",
       ctaPrimary: { label: "Get a Quote", href: "#contact" },
     },
     about: {
@@ -65,7 +65,7 @@ export const siteConfig: SiteConfig = {
     },
     services: {
       enabled: true,
-      heading: "Our Services",
+      heading: "Our Cargo & Sourcing Services",
       items: [
         {
           title: "Air Cargo",
@@ -88,7 +88,7 @@ export const siteConfig: SiteConfig = {
       enabled: true,
       heading: "Get in touch",
       subheading:
-        "Send us a message on WhatsApp or fill in the form and we'll get back to you within a few hours.",
+        "Send us a message on WhatsApp or reach us by phone or email — we'll get back to you within a few hours.",
     },
   },
   nav: {
@@ -104,19 +104,41 @@ export const siteConfig: SiteConfig = {
     showBuiltBy: true,
   },
   seo: {
-    defaultTitle: "NEK Ventures | Air & Sea Cargo to USA, UK, Canada & Europe",
+    // Drives canonical URLs, Open Graph image URLs, robots.txt and the sitemap.
+    // Resolves itself in every environment, so there is nothing to configure:
+    //   1. NEXT_PUBLIC_SITE_URL  — manual override, wins if set.
+    //   2. On Vercel, the project's production domain. Vercel sets this to the
+    //      custom domain once one is added, and to *.vercel.app until then, so
+    //      buying a domain needs no code change.
+    //   3. Local dev.
+    siteUrl:
+      process.env.NEXT_PUBLIC_SITE_URL ??
+      (process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL
+        ? `https://${process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL}`
+        : "http://localhost:3000"),
+    defaultTitle: "Air & Sea Cargo from Nigeria to USA, UK & Europe | NEK Ventures",
     defaultDescription:
-      "Reliable air and sea cargo shipping from Nigeria to the USA, UK, Canada and Europe. We also source Nigerian food items and hair accessories for the diaspora.",
+      "Lagos-based air and sea cargo to the USA, UK, Canada and Europe. Door-to-door shipping, plus sourcing of Nigerian foodstuff and hair accessories for the diaspora.",
+    ogImage: "/og.png",
     keywords: [
       "NEK Ventures",
-      "Nigeria cargo",
-      "air cargo Nigeria",
-      "sea cargo Nigeria",
-      "shipping to USA",
-      "shipping to UK",
-      "shipping to Canada",
-      "Nigerian food export",
+      "cargo services Nigeria",
+      "air cargo from Nigeria",
+      "sea cargo from Nigeria",
+      "shipping company in Lagos",
+      "freight forwarding Nigeria",
+      "shipping from Nigeria to USA",
+      "shipping from Nigeria to UK",
+      "shipping from Nigeria to Canada",
+      "shipping from Nigeria to Europe",
+      "door to door shipping Nigeria",
+      "container shipping Nigeria",
+      "Nigerian foodstuff export",
+      "ship Nigerian food abroad",
       "hair accessories shipping",
+      "wigs and weavons shipping",
+      "procurement and sourcing agent Nigeria",
+      "diaspora shipping Nigeria",
     ],
   },
   features: {

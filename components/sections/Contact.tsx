@@ -1,47 +1,14 @@
-"use client";
-
-import { useState, type FormEvent } from "react";
 import { siteConfig } from "@/site.config";
-
-type Status = "idle" | "loading" | "success" | "error";
 
 export function Contact() {
   const contact = siteConfig.sections.contact;
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [status, setStatus] = useState<Status>("idle");
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
   if (!contact.enabled) return null;
 
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setStatus("loading");
-    setErrorMsg(null);
-
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        setErrorMsg(data?.error ?? "Something went wrong. Please try again.");
-        setStatus("error");
-        return;
-      }
-
-      setStatus("success");
-      setForm({ name: "", email: "", message: "" });
-    } catch {
-      setErrorMsg("Network error. Please try again.");
-      setStatus("error");
-    }
-  }
-
-  const inputClass =
-    "w-full rounded-lg border border-foreground/15 bg-background px-4 py-3 text-sm text-foreground placeholder:text-foreground/40 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20";
+  const { email, phone, whatsapp, whatsappPrefilledMessage, address, hours } = siteConfig.contact;
+  const waNumber = whatsapp?.replace(/[^0-9]/g, "");
+  const waHref = waNumber
+    ? `https://wa.me/${waNumber}${whatsappPrefilledMessage ? `?text=${encodeURIComponent(whatsappPrefilledMessage)}` : ""}`
+    : null;
 
   return (
     <section id="contact" className="px-6 py-24 bg-background">
@@ -57,28 +24,27 @@ export function Contact() {
           <div className="space-y-4 text-sm">
             <div>
               <p className="font-semibold text-foreground">Email</p>
-              <a href={`mailto:${siteConfig.contact.email}`} className="text-foreground/70 hover:text-primary">
-                {siteConfig.contact.email}
+              <a href={`mailto:${email}`} className="text-foreground/70 hover:text-primary">
+                {email}
               </a>
             </div>
             <div>
               <p className="font-semibold text-foreground">Phone</p>
-              <a href={`tel:${siteConfig.contact.phone}`} className="text-foreground/70 hover:text-primary">
-                {siteConfig.contact.phone}
+              <a href={`tel:${phone}`} className="text-foreground/70 hover:text-primary">
+                {phone}
               </a>
             </div>
             <div>
               <p className="font-semibold text-foreground">Address</p>
               <p className="text-foreground/70">
-                {siteConfig.contact.address.street}, {siteConfig.contact.address.city},{" "}
-                {siteConfig.contact.address.state}
+                {address.street}, {address.city}, {address.state}
               </p>
             </div>
-            {siteConfig.contact.hours.length > 0 && (
+            {hours.length > 0 && (
               <div>
                 <p className="font-semibold text-foreground">Hours</p>
                 <ul className="text-foreground/70">
-                  {siteConfig.contact.hours.map((h) => (
+                  {hours.map((h) => (
                     <li key={h.day}>
                       {h.day}: {h.open}–{h.close}
                     </li>
@@ -88,49 +54,27 @@ export function Contact() {
             )}
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <input
-              type="text"
-              name="name"
-              required
-              placeholder="Your name"
-              value={form.name}
-              onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-              className={inputClass}
-            />
-            <input
-              type="email"
-              name="email"
-              required
-              placeholder="Your email"
-              value={form.email}
-              onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-              className={inputClass}
-            />
-            <textarea
-              name="message"
-              required
-              rows={5}
-              placeholder="How can we help?"
-              value={form.message}
-              onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
-              className={inputClass}
-            />
-            <button
-              type="submit"
-              disabled={status === "loading"}
-              className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-medium text-white shadow-sm transition hover:opacity-90 disabled:opacity-60"
+          <div className="flex flex-col justify-center gap-3 rounded-xl border border-foreground/10 p-8">
+            <p className="text-sm text-foreground/70">
+              The fastest way to reach us is WhatsApp — we usually reply within a few hours.
+            </p>
+            {waHref && (
+              <a
+                href={waHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-medium text-white shadow-sm transition hover:opacity-90"
+              >
+                Chat on WhatsApp
+              </a>
+            )}
+            <a
+              href={`mailto:${email}`}
+              className="inline-flex items-center justify-center rounded-lg border border-foreground/15 px-6 py-3 text-sm font-medium text-foreground transition hover:border-primary hover:text-primary"
             >
-              {status === "loading" ? "Sending…" : "Send message"}
-            </button>
-
-            {status === "success" && (
-              <p className="text-sm text-primary">Thanks — we&apos;ll be in touch shortly.</p>
-            )}
-            {status === "error" && (
-              <p className="text-sm text-red-600">{errorMsg}</p>
-            )}
-          </form>
+              Send an email
+            </a>
+          </div>
         </div>
       </div>
     </section>

@@ -7,8 +7,6 @@ A production-ready Next.js marketing site template for Nigerian small and medium
 - Next.js 16 (App Router) + React 19
 - TypeScript
 - Tailwind CSS v4 (CSS-first `@theme` configuration)
-- Resend for transactional email
-- Zod for request validation
 - Deployed on Vercel
 
 ## Getting Started
@@ -17,7 +15,6 @@ A production-ready Next.js marketing site template for Nigerian small and medium
 git clone https://github.com/Chrisemeka/smb-site-template.git my-client-site
 cd my-client-site
 npm install
-cp .env.local.example .env.local   # then fill in RESEND_API_KEY
 ```
 
 Edit `site.config.ts` with the client's business details, then:
@@ -27,6 +24,7 @@ npm run dev      # start local dev server at http://localhost:3000
 npm run build    # production build
 npm run start    # serve the production build
 npm run lint     # ESLint
+npm test         # node:test unit tests
 ```
 
 ## Configuration
@@ -47,14 +45,14 @@ Highlights:
 
 ## Environment Variables
 
-Create `.env.local` from `.env.local.example`:
+None required. The site's public origin — which drives the canonical URL, Open
+Graph image URLs, `robots.txt` and the sitemap — resolves automatically:
 
-| Variable | Required | Purpose |
-| --- | --- | --- |
-| `RESEND_API_KEY` | Yes | Sends contact-form submissions via Resend. Get one at [resend.com/api-keys](https://resend.com/api-keys). |
-| `NEXT_PUBLIC_SITE_URL` | Optional | Absolute origin used in `app/sitemap.ts` (e.g. `https://client.com`). Defaults to a placeholder. |
-
-The API route sends from `onboarding@resend.dev` by default — swap to a verified sender in `app/api/contact/route.ts` before going live.
+| Environment | Origin used |
+| --- | --- |
+| Local dev | `http://localhost:3000` |
+| Vercel | The project's production domain, via Vercel's own `NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL`. This is the `*.vercel.app` subdomain until a custom domain is added in Project Settings → Domains, then it switches automatically — no code change, no redeploy config. |
+| Anywhere else | Set `NEXT_PUBLIC_SITE_URL` (e.g. `https://client.com`); it overrides both of the above. |
 
 ## Deployment
 
@@ -62,15 +60,16 @@ Vercel is the fastest path:
 
 1. Push the repo to GitHub.
 2. Import the project at [vercel.com/new](https://vercel.com/new).
-3. Add `RESEND_API_KEY` (and optionally `NEXT_PUBLIC_SITE_URL`) under Project Settings → Environment Variables.
-4. Deploy. Subsequent pushes to `main` deploy automatically.
+3. Deploy. Subsequent pushes to `main` deploy automatically.
+
+No environment variables needed — SEO URLs pick up the Vercel domain on their own.
 
 For custom domains, add the domain in Vercel and update DNS as instructed.
 
 ## Project structure
 
 ```
-app/                 App Router pages, layouts, API routes, sitemap
+app/                 App Router pages, layouts, robots.txt, sitemap
 components/sections/ Page sections (Hero, About, Services, Contact, etc.)
 components/ui/       Reusable primitives (empty by default)
 content/             JSON/MDX content (empty by default)

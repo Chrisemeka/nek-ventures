@@ -35,6 +35,7 @@
 import type { Metadata } from "next";
 import { Poppins, Inter } from "next/font/google";
 import { siteConfig } from "@/site.config";
+import { toDayOfWeek, to24h } from "@/lib/opening-hours";
 import "./globals.css";
 
 /*
@@ -55,9 +56,10 @@ const body = Inter({
   display: "swap",
 });
 
-const { business, seo, contact, theme } = siteConfig;
+const { business, seo, contact, theme, social } = siteConfig;
 
 export const metadata: Metadata = {
+  metadataBase: new URL(seo.siteUrl),
   title: {
     default: seo.defaultTitle,
     template: `%s | ${business.name}`,
@@ -65,13 +67,17 @@ export const metadata: Metadata = {
   description: seo.defaultDescription,
   keywords: seo.keywords,
   icons: { icon: business.logo.favicon },
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
+    url: "/",
     title: seo.defaultTitle,
     description: seo.defaultDescription,
     siteName: business.name,
     locale: "en_NG",
-    ...(seo.ogImage ? { images: [{ url: seo.ogImage }] } : {}),
+    ...(seo.ogImage
+      ? { images: [{ url: seo.ogImage, width: 1200, height: 630, alt: business.name }] }
+      : {}),
   },
   twitter: {
     card: seo.ogImage ? "summary_large_image" : "summary",
@@ -84,11 +90,17 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
+  "@id": `${seo.siteUrl}/#business`,
   name: business.name,
   description: business.description,
-  url: "/",
+  slogan: business.tagline,
+  url: seo.siteUrl,
+  logo: `${seo.siteUrl}${business.logo.light}`,
+  image: `${seo.siteUrl}${seo.ogImage ?? business.logo.light}`,
   telephone: contact.phone,
   email: contact.email,
+  ...(business.yearFounded ? { foundingDate: String(business.yearFounded) } : {}),
+  priceRange: "$$",
   address: {
     "@type": "PostalAddress",
     streetAddress: contact.address.street,
@@ -96,19 +108,32 @@ const jsonLd = {
     addressRegion: contact.address.state,
     addressCountry: contact.address.country,
   },
+  // Destinations we ship to — helps Google match "shipping from Nigeria to X" queries.
+  areaServed: ["Nigeria", "United States", "United Kingdom", "Canada", "Europe"].map(
+    (name) => ({ "@type": "Place", name })
+  ),
+  sameAs: Object.values(social).filter(Boolean),
   openingHoursSpecification: contact.hours.map((h) => ({
     "@type": "OpeningHoursSpecification",
-    dayOfWeek: h.day,
-    opens: h.open,
-    closes: h.close,
+    dayOfWeek: toDayOfWeek(h.day),
+    opens: to24h(h.open),
+    closes: to24h(h.close),
   })),
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: siteConfig.sections.services.heading,
+    itemListElement: siteConfig.sections.services.items.map((s) => ({
+      "@type": "Offer",
+      itemOffered: { "@type": "Service", name: s.title, description: s.description },
+    })),
+  },
 };
 
 const rootStyle = `:root{--brand-primary:${theme.colors.primary};--brand-secondary:${theme.colors.secondary};--brand-background:${theme.colors.background};--brand-foreground:${theme.colors.foreground};--brand-muted:${theme.colors.muted};}`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${heading.variable} ${body.variable}`}>
+    <html lang="en-NG" className={`${heading.variable} ${body.variable}`}>
       <head>
         <style dangerouslySetInnerHTML={{ __html: rootStyle }} />
         <script
